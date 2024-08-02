@@ -252,6 +252,7 @@ export namespace workshop {
    * {@link https://partner.steamgames.com/doc/api/ISteamUGC#UnsubscribeItem}
    */
   export function unsubscribe(itemId: bigint): Promise<void>
+  export function deleteItem(itemId: bigint): Promise<void>
   /**
    * Gets the current state of a workshop item on this client. States can be combined.
    *

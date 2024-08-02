@@ -307,6 +307,24 @@ pub mod workshop {
         }
     }
 
+    #[napi]
+    pub async fn delete_item(item_id: BigInt) -> Result<(), Error> {
+        let client = crate::client::get_client();
+        let (tx, rx) = oneshot::channel();
+
+        client
+            .ugc()
+            .delete_item(PublishedFileId(item_id.get_u64().1), |result| {
+                tx.send(result).unwrap();
+            });
+
+        let result = rx.await.unwrap();
+        match result {
+            Ok(()) => Ok(()),
+            Err(e) => Err(Error::from_reason(e.to_string())),
+        }
+    }
+
     /// Gets the current state of a workshop item on this client. States can be combined.
     ///
     /// @returns a number with the current item state, e.g. 9
